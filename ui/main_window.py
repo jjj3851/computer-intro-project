@@ -23,7 +23,7 @@ ACCENT = "#1f6feb"      # 主按钮蓝
 
 
 class MainWindow:
-    def __init__(self, root=None):
+    def __init__(self, root=None, force_scaling=None):
         self.root = root or tk.Tk()
         self.root.title("进位制转换步骤演示器 — 除基取余 × 按权展开可视化")
         self.root.configure(bg=BG)
@@ -34,6 +34,10 @@ class MainWindow:
         self.root.geometry("{}x{}+{}+{}".format(w, h, max(0, (sw - w) // 2), max(0, (sh - h) // 2)))
 
         # ---- DPI 字体自适应 ----
+        # force_scaling：截图模式下固定缩放系数（96/72），保证 1250x760 布局与设计一致；
+        # 正常运行时为 None，按操作系统实际 DPI 自适应。
+        if force_scaling:
+            self.root.tk.call("tk", "scaling", force_scaling)
         scaling = float(self.root.tk.call("tk", "scaling"))
         self.k = max(0.8, min(1.8, scaling / 1.3333))
         self.f_body = self._font(11)
