@@ -37,6 +37,10 @@ python main.py
 
 > 附：`python main.py --screenshot main|step|done` 为文档截图模式（需要 Pillow），正常运行无需关心。
 
+### 4. 常见问题
+- **运行 `python main.py` 提示"python 不是内部或外部命令"**：说明未安装 Python，或安装时没勾选 "Add python.exe to PATH"。请到 python.org 重新安装并勾选该选项，然后重开终端。
+- **双击运行没反应**：本程序需在终端里用 `python main.py` 启动，不要双击 .py 文件。
+
 ## 三、软件运行截图
 
 | 主界面（示例已载入） | 单步执行（当前步骤绿色高亮） | 播放完成（结果与校验横幅） |
