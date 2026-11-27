@@ -27,6 +27,9 @@ class TestParse(unittest.TestCase):
     def test_prefixes(self):
         self.assertEqual(parse_number("0b101", 2), 5)
         self.assertEqual(parse_number("0o17", 8), 15)
+        self.assertEqual(parse_number("0o20", 8), 16)
+        self.assertEqual(parse_number("0o31", 8), 25)
+        self.assertEqual(parse_number("0o77", 8), 63)
 
     def test_invalid_char(self):
         with self.assertRaises(ConversionError):
@@ -119,7 +122,18 @@ class TestConvert(unittest.TestCase):
     def test_big_number_hex(self):
         r = convert_with_steps("4294967295", 10, 16)
         self.assertEqual(r["result"], "FFFFFFFF")
+       
+    def test_hex_with_letters_a5(self):     
+        r = convert_with_steps("A5", 16, 10)
+        self.assertEqual(r["result"], "165")
+        self.assertTrue(r["verify"])
+        
+    def test_hex_with_letters_ff(self):       
+        r = convert_with_steps("FF", 16, 10)
+        self.assertEqual(r["result"], "255")
+        self.assertTrue(r["verify"])
 
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+    

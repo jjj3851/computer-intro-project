@@ -7,6 +7,7 @@
 - 控件装配：数字输入、源/目标进制下拉框、载入/重置、单步、自动播放、速度滑块、日志面板；
 - 事件处理：输入校验失败弹框提示并写红色日志；载入成功生成播放计划。
 """
+from datetime import datetime
 
 import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
@@ -27,7 +28,11 @@ class MainWindow:
         self.root = root or tk.Tk()
         self.root.title("进位制转换步骤演示器 — 除基取余 × 按权展开可视化")
         self.root.configure(bg=BG)
-        self.root.minsize(960, 600)
+
+        
+
+        self.root.minsize(1000, 640)
+ 
         # 窗口 1250x760 并居中
         w, h = 1250, 760
         sw, sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
@@ -181,8 +186,11 @@ class MainWindow:
 
     # ---------------- 事件处理 ----------------
     def log(self, text, tag="step"):
+        # 增加时间戳 [时:分:秒]
+        time_str = datetime.now().strftime("%H:%M:%S")
+        new_text = f"[{time_str}] {text}"
         self.txt_log.configure(state="normal")
-        self.txt_log.insert("end", text + "\n", tag)
+        self.txt_log.insert("end", new_text + "\n", tag)
         self.txt_log.see("end")
         self.txt_log.configure(state="disabled")
 
