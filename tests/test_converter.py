@@ -122,7 +122,18 @@ class TestConvert(unittest.TestCase):
     def test_big_number_hex(self):
         r = convert_with_steps("4294967295", 10, 16)
         self.assertEqual(r["result"], "FFFFFFFF")
+       
+    def test_hex_with_letters_a5(self):     
+        r = convert_with_steps("A5", 16, 10)
+        self.assertEqual(r["result"], "165")
+        self.assertTrue(r["verify"])
+        
+    def test_hex_with_letters_ff(self):       
+        r = convert_with_steps("FF", 16, 10)
+        self.assertEqual(r["result"], "255")
+        self.assertTrue(r["verify"])
 
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+    
