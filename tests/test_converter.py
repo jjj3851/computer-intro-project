@@ -40,7 +40,22 @@ class TestParse(unittest.TestCase):
         for bad in ("", "   ", "-5", "+5"):
             with self.assertRaises(ConversionError):
                 parse_number(bad, 10)
+def test_empty_and_sign(self):
+        for bad in ("", "  ", "-5", "+5"):
+            with self.assertRaises(ConversionError):
+                parse_number(bad, 10)
 
+    def test_octal_zero(self):
+        # 八进制测试：数字 0
+        self.assertEqual(parse_number("0", 8), 0)
+
+    def test_octal_normal(self):
+        # 八进制测试：普通数值
+        self.assertEqual(parse_number("12", 8), 10)
+
+    def test_octal_boundary(self):
+        # 八进制边界测试
+        self.assertEqual(parse_number("77", 8), 63)
 
 class TestDivide(unittest.TestCase):
     def test_25_to_bin(self):
