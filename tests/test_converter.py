@@ -123,3 +123,14 @@ class TestConvert(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+    def test_hex_with_letters_a5(self):
+            # 十六进制 A5 转十进制：A(10)*16 + 5 = 165
+            r = convert_with_steps("A5", 16, 10)
+            self.assertEqual(r["result"], "165")
+            self.assertTrue(r["verify"])
+    
+    def test_hex_with_letters_ff(self):
+            # 十六进制 FF 转十进制：F(15)*16 + 15 = 255
+            r = convert_with_steps("FF", 16, 10)
+            self.assertEqual(r["result"], "255")
+            self.assertTrue(r["verify"])
