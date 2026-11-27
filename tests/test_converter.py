@@ -27,6 +27,9 @@ class TestParse(unittest.TestCase):
     def test_prefixes(self):
         self.assertEqual(parse_number("0b101", 2), 5)
         self.assertEqual(parse_number("0o17", 8), 15)
+        self.assertEqual(parse_number("0o20", 8), 16)
+        self.assertEqual(parse_number("0o31", 8), 25)
+        self.assertEqual(parse_number("0o77", 8), 63)
 
     def test_invalid_char(self):
         with self.assertRaises(ConversionError):
