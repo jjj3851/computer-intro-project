@@ -96,13 +96,27 @@ computer-intro-project/
 
 **提交信息规范**：`type(scope): 描述`，type ∈ init / docs / design / feat / fix / test / chore。
 
-**PR 与合并冲突记录**：
+**PR 全记录**（第一轮文档协作 + 第二轮代码迭代，均经 PM 审查后合并）：
 
-| PR | 源分支 → 目标分支 | 内容 | 审查人 | 状态 |
-| -- | ---------------- | ---- | ------ | ---- |
-| （团队协作阶段由各成员发起后填写） | | | | |
+| PR | 源分支 | 内容 | 作者 | 状态 |
+| -- | ------ | ---- | ---- | ---- |
+| #1 | `D63987-patch-1` | docs: 补充除基取余算法的数学依据 | 吕智豪 | ✅ 已合并 |
+| #2 | `ren592-patch-1` | docs: 看板滚动说明（首版，行尾残留重复文案） | 任之奇 | ❌ 已关闭，被 #3 取代 |
+| #3 | `ren592-patch-2` | docs: 补充看板自动滚动行为说明（修正版） | 任之奇 | ✅ 已合并 |
+| #4 | `zhh-cloud-cmd-patch-1` | docs: 新增运行常见问题 | 张皓涵 | ✅ 已合并 |
+| #5 | `git-checkout--b-feature/ui-layout` | feat: 调整窗口最小尺寸 | 杨星宇 | ✅ 已合并（合并后热修 `7454d36`：`self.minsize`→`self.root.minsize`） |
+| #6 | `qi-1226:feature/weighted-expand` | test: 含字母十六进制按权展开 2 用例 | 齐润浩 | ✅ 已合并（首版测试方法位置错误被打回，修正版 19 测试全过） |
+| #7 | `feature/core-logic` | tests: 八进制前缀解析 3 断言 | 吕智豪 | ✅ 已合并 |
+| #8 | `zhh-cloud-cmd-patch-1` | feat: 运行日志添加时间戳 | 张皓涵 | ✅ 已合并 |
+| #9 | `feature/canvas-steps` | 冲突演练首次尝试（误改测试文件、历史无合并记录） | 任之奇 | ❌ 已关闭，打回重做 |
+| #10 | `feature/canvas-conflict` | feat + fix: 窗口尺寸调整与合并冲突解决 | 任之奇 | ✅ 已合并 |
 
-> 按作业要求，团队将人为制造并解决一次合并冲突（两人同时修改主窗口初始化参数），解决过程以冲突提交记录留痕。
+**合并冲突演练记录**（作业阶段四要求，已完成 ✅）：
+
+- **冲突双方**：杨星宇（PR#5）与任之奇（PR#10）先后修改 `ui/main_window.py` 同一行的窗口最小尺寸参数（`980x620` → `1000x640` / `960x600`）
+- **触发过程**：任之奇从冲突前节点 `610b08f` 创建 `feature/canvas-conflict` 分支提交自己的修改，执行 `git pull origin main --no-rebase`，得到 `CONFLICT (content): Merge conflict in ui/main_window.py`
+- **解决方式**：在 VS Code 中识别 `<<<<<<< HEAD` / `=======` / `>>>>>>>` 冲突标记，协商后保留 main 侧的 `self.root.minsize(1000, 640)`，删除标记行
+- **留痕证据**：合并提交 `096c629`（含两个父提交 `bb3edc9` 与 `02be176`），提交说明 `fix: 解决与 main 在 minsize 参数上的合并冲突（保留 1000x640）`，可在 `git log --graph` 与 PR#10 的 Commits 页查看完整合并图谱
 
 ## 七、贡献者名单
 
