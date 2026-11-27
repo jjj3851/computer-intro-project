@@ -27,7 +27,7 @@ class MainWindow:
         self.root = root or tk.Tk()
         self.root.title("进位制转换步骤演示器 — 除基取余 × 按权展开可视化")
         self.root.configure(bg=BG)
-        self.root.minsize(980, 620)
+        self.root.minsize(960, 600)
         # 窗口 1250x760 并居中
         w, h = 1250, 760
         sw, sh = self.root.winfo_screenwidth(), self.root.winfo_screenheight()
