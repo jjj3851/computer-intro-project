@@ -51,9 +51,67 @@ AI 生成的左右 Frame 使用了固定的 `width` 和 `height`，导致调整�
 
 ---
 
+## 附录：组员 Vibe Coding 实录（真实对话截图存档）
+
+第二轮协作中，每位成员都使用 AI 编程助手完成了自己的任务，原始对话截图存档于 `docs/images/ai-logs/`，以下为各人的提示词摘录与关键收获。
+
+### 杨星宇 · 窗口最小尺寸调整（DeepSeek）
+
+提示词摘录：*“你是资深 Python GUI 开发工程师。打开 ui/main_window.py，把 self.root.minsize(980, 620) 改成 minsize(1000, 640)……”*
+
+![杨星宇与 DeepSeek 的对话](docs/images/ai-logs/yangxingyu-minsize.png)
+
+**典型纠错案例**：AI 的输出完全正确，还特别提醒“只改绑定 self.root 的那一处，不要误改”，但人工粘贴时仍丢了 `root.` 前缀（`self.minsize` 不存在），导致程序启动即崩溃；PM 在合并后回归测试中发现并热修（commit `7454d36`）。这正说明：**AI 对了不等于结果对了，人工审查 + 运行验证不可省略**。
+
+### 吕智豪 · 八进制转换测试用例（豆包）
+
+提示词摘录：*“你是资深 Python 测试工程师。请为 test_converter.py 补充八进制转换的测试用例 3 个，要求使用 unittest 风格、带中文注释、覆盖 0 和边界值。”*
+
+![吕智豪与豆包的对话（一）](docs/images/ai-logs/lvzhihao-octal-tests-1.jpg)
+![吕智豪与豆包的对话（二）](docs/images/ai-logs/lvzhihao-octal-tests-2.jpg)
+
+收获：AI 主动区分了“前缀解析测试”与“转换过程测试”不重复，帮助他明确测试分层；还主动提议跑完测试再推送更新 PR（最终合并为 PR#7）。
+
+### 齐润浩 · 十六进制按权展开测试用例（DeepSeek）
+
+提示词摘录：*“你是一位资深 Python 测试工程师。请为 test_converter.py 补充 2 个包含字母的十六进制按权展开测试用例（例如 'A5'→165），要求使用 unittest 风格、带中文注释。”*
+
+![齐润浩与 DeepSeek 的对话（一）](docs/images/ai-logs/qirunhao-hex-tests-1.jpg)
+![齐润浩与 DeepSeek 的对话（二）](docs/images/ai-logs/qirunhao-hex-tests-2.jpg)
+
+**典型纠错案例**：AI 生成的测试代码本身正确，但他首次提交时把方法粘贴到了 `if __name__ == "__main__":` 块之后，成为永远不会被执行的死代码；PM 审查发现后打回，修正位置后 19 个测试全过（PR#6）。
+
+### 张皓涵 · 运行日志时间戳（DeepSeek）
+
+提示词摘录：*“你是资深 Python GUI 开发工程师。请修改 ui/main_window.py 里面的 log(self, text, tag="step") 函数，给每一条日志开头增加 [时:分:秒] 的时间戳，使用 datetime 获取时间……4. 把需要增加的 import 语句一并给出。”*
+
+![张皓涵与 DeepSeek 的对话](docs/images/ai-logs/zhanghaohan-log-timestamp.png)
+
+收获：提示词给出了 4 条可验收的约束（unittest 兼容、中文注释、可直接运行、import 完整），AI 输出一次通过审查合并（PR#8）。
+
+### 任之奇 · 合并冲突三轮复盘对话（DeepSeek）
+
+在真实解决 minsize 合并冲突（merge commit `096c629`）之后，他与 AI 进行了三段式复盘：
+
+1. **理解冲突**：“你是一位资深的 Git 协作工程师……git pull origin main --no-rebase 后报错 CONFLICT (content)，请解释报错含义、冲突成因、<<<<<<< HEAD / ======= / >>>>>>> 三种标记各代表什么”
+2. **解决路径**：贴出真实冲突块（960,600 vs 1000,640），请 AI 给出 VS Code 解决步骤（Accept Incoming Change）与后续 git 命令
+3. **复盘评价**：贴出自己的实际解决结果与提交说明，请 AI 评价过程是否规范、总结冲突根因与预防建议
+
+![任之奇与 DeepSeek 的对话（一）](docs/images/ai-logs/renzhiqi-conflict-1.png)
+![任之奇与 DeepSeek 的对话（二）](docs/images/ai-logs/renzhiqi-conflict-2.png)
+![任之奇与 DeepSeek 的对话（三）](docs/images/ai-logs/renzhiqi-conflict-3.png)
+![任之奇与 DeepSeek 的对话（四）](docs/images/ai-logs/renzhiqi-conflict-4.png)
+![任之奇与 DeepSeek 的对话（五）](docs/images/ai-logs/renzhiqi-conflict-5.png)
+![任之奇与 DeepSeek 的对话（六）](docs/images/ai-logs/renzhiqi-conflict-6.png)
+
+AI 给出的评价结论：“流程合规、结果正确、留痕完整”，并提出两条预防建议：小步提交 + 高频同步缩短偏离窗口；把窗口尺寸等易冲突常量集中到配置模块（单一事实源）。
+
+---
+
 ## 心得小结
 
 - **提示词要给足上下文**：角色设定 + 明确输入输出结构 + 约束条件（中文注释、模块化），AI 的产出质量显著提升；
 - **AI 擅长骨架、易漏边界**：0 特判、非法输入、空状态这类边界几乎每次都要人工补齐，测试用例（`tests/test_converter.py`，17 例）是兜底防线；
 - **性能意识要人来把关**：AI 默认“能跑就行”的全量重绘写法在真实交互中会卡顿，识别并重构它是我们对 AI 输出最重要的修正；
-- 各成员完整的 AI 对话与多轮调试过程，见各自 feature 分支的提交历史。
+- **AI 对了 ≠ 结果对了**：两次真实事故（粘贴丢 `root.` 前缀、测试贴进死代码区）中 AI 输出都是正确的，错误发生在人工搬运环节，全靠“审查 + 跑测试”兜底——这是本项目对“不盲目复制粘贴”最深刻的体会；
+- 各成员完整的 AI 对话截图已存档于 `docs/images/ai-logs/`（见上文附录），代码演进过程见各自分支的提交历史。
